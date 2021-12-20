@@ -8,10 +8,10 @@
   <body style="text-align: center">
     <script>
       var unityCanvas = document.createElement("unity-canvas");
-      unityCanvas.height = $(window).height();
-      unityCanvas.style.height = $(window).height() + "px";
-      unityCanvas.width = $(window).width();
-      unityCanvas.style.width = $(window).width() + "px";
+      unityCanvas.height = window.screen.height * window.devicePixelRatio;
+      unityCanvas.style.height = window.screen.height * window.devicePixelRatio + "px";
+      unityCanvas.width = window.screen.width * window.devicePixelRatio;
+      unityCanvas.style.width = window.screen.width * window.devicePixelRatio + "px";
       document.body.appendChild(unityCanvas);
     </script>
     <script src="Build/Builds.loader.js"></script>
