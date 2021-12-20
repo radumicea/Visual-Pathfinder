@@ -7,23 +7,25 @@
   </head>
   <body style="text-align: center">
     <script>
-      var h = window.screen.width * window.devicePixelRatio;
-      var w = window.screen.height * window.devicePixelRatio;
+      var h = $(window).height();
+      var w = $(window).width();
+      
       var newCanvas = document.createElement("canvas");
-      newCanvas.style.height = h;
-      newCanvas.style.width = w;
+      newCanvas.id = "unity-canvas";
+      newCanvas.style.height = h + "px";
+      newCanvas.style.width = w + "px";
       document.body.appendChild(newCanvas);
-    </script>
+      </script>
     <script src="Build/Builds.loader.js"></script>
     <script>
-      createUnityInstance(document.querySelector("#unity-canvas"),{
+      createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
         codeUrl: "Build/Builds.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Radu",
         productName: "Path",
-        productVersion: "1.04"
+        productVersion: "1.04",
       });
     </script>
   </body>
