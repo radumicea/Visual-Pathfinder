@@ -6,14 +6,14 @@
     <title>Path</title>
   </head>
   <body style="text-align: center">
-    <canvas id="unity-canvas" width=1280 height=720 style="width: 1280px; height: 720px; background: #231F20"></canvas>
+    <canvas id="unity-canvas" style="background: #231F20"></canvas>
     <script src="Build/Builds.loader.js"></script>
     <script>
       var unityCanvas = document.querySelector("#unity-canvas");
-      unityCanvas.height = window.screen.height * window.devicePixelRatio;
-      unityCanvas.style.height = window.screen.height * window.devicePixelRatio + "px";
-      unityCanvas.width = window.screen.width * window.devicePixelRatio;
-      unityCanvas.style.width = window.screen.width * window.devicePixelRatio + "px";
+      unityCanvas.height = $(window).height();
+      unityCanvas.style.height = $(window).height() + "px";
+      unityCanvas.width = $(window).width();
+      unityCanvas.style.width = $(window).width() + "px";
       createUnityInstance(unityCanvas, {
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
