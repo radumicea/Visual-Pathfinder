@@ -9,19 +9,16 @@
     <canvas id="unity-canvas" width=1280 height=720 style="width: 1280px; height: 720px; background: #231F20"></canvas>
     <script src="Build/Builds.loader.js"></script>
     <script>
-      var canvas = document.querySelector("#unity-canvas");
-      canvas.height = $(window).height();
-      canvas.style.height = $(window).height();      
-      canvas.width = $(window).width();      
-      canvas.style.width = $(window).width();
-      createUnityInstance(canvas, {
+      createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
         codeUrl: "Build/Builds.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Radu",
         productName: "Path",
-        productVersion: "1.05",
+        productVersion: "1.04",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
     </script>
   </body>
