@@ -7,14 +7,16 @@
   </head>
   <body style="text-align: center">
     <canvas id="unity-canvas" style="background: #231F20"></canvas>
-    <script src="Build/Builds.loader.js"></script>
     <script>
       var unityCanvas = document.querySelector("#unity-canvas");
-      unityCanvas.height = $(window).height();
-      unityCanvas.style.height = $(window).height() + "px";
-      unityCanvas.width = $(window).width();
-      unityCanvas.style.width = $(window).width() + "px";
-      createUnityInstance(unityCanvas, {
+      unityCanvas.height = window.innerHeight / 1.05;
+      unityCanvas.style.height = window.innerHeight / 1.05 + "px";
+      unityCanvas.width = window.innerWidth / 1.05;
+      unityCanvas.style.width = window.innerWidth / 1.05 + "px";
+    </script>
+    <script src="Build/Builds.loader.js"></script>
+    <script>
+      createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
         codeUrl: "Build/Builds.wasm",
