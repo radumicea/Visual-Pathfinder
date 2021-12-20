@@ -6,114 +6,25 @@
     <title>Path</title>
   </head>
   <body style="text-align: center">
-    <canvas id="unity-canvas" width=1280 height=720 style="width: 1280px; height: 720px; background: #231F20"></canvas>
+    <script>
+      var h = window.screen.width * window.devicePixelRatio;
+      var w = window.screen.height * window.devicePixelRatio;
+      var newCanvas = document.createElement("canvas");
+      newCanvas.style.height = h;
+      newCanvas.style.width = w;
+      document.body.appendChild(newCanvas);
+    </script>
     <script src="Build/Builds.loader.js"></script>
     <script>
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      createUnityInstance(document.querySelector("#unity-canvas"),{
         dataUrl: "Build/Builds.data",
         frameworkUrl: "Build/Builds.framework.js",
         codeUrl: "Build/Builds.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Radu",
         productName: "Path",
-        productVersion: "1.04",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        productVersion: "1.04"
       });
     </script>
-    <script type='text/javascript'>
-      var myHeight = 100; var myWidth = 100;
-      
-      OnLoaded(); //You can fire this from inside after the canvas gets started
-        
-      function OnLoaded(){
-        reportSize();
-        document.getElementById('canvas').style.width = myWidth + 'px';
-        document.getElementById('canvas').style.height = myHeight + 'px';
-        
-        window.onresize = function(){
-          reportSize();
-          document.getElementById('canvas').style.width = myWidth + 'px';
-          document.getElementById('canvas').style.height = myHeight + 'px';
-        }
-      }
-      
-      function reportSize() {
-        myWidth = 0; myHeight = 0;
-        if( typeof( window.innerWidth ) == 'number' ) {
-          //Non-IE
-          myWidth = window.innerWidth;
-          myHeight = window.innerHeight;
-        } else {
-          if( document.documentElement &&
-              ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
-            //IE 6+ in 'standards compliant mode'
-            myWidth = document.documentElement.clientWidth;
-            myHeight = document.documentElement.clientHeight;
-          } else {
-            if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-              //IE 4 compatible
-              myWidth = document.body.clientWidth;
-              myHeight = document.body.clientHeight;
-            }
-          }
-        }
-      }
-    </script>
-    <script>
-    if (!(!Math.fround))
-    {
-      var script = document.createElement('script');
-      script.src = "Build/Builds.framework.js";
-      document.body.appendChild(script);
-    }
-    else
-    {
-      var codeXHR = new XMLHttpRequest();
-      codeXHR.open('GET', 'Build/Builds.framework.js', true);
-      codeXHR.onload = function() {
-      var code = codeXHR.responseText;
-      if (!Math.fround)
-      { 
-        try
-        {
-          console.log('optimizing out Math.fround calls');
-          var m = /var ([^=]+)=global\.Math\.fround;/.exec(code);
-          var minified = m[1];
-          if (!minified)
-          {
-            throw 'fail';
-          }
-          var startAsm = code.indexOf('// EMSCRIPTEN_START_FUNCS');
-          var endAsm = code.indexOf('// EMSCRIPTEN_END_FUNCS');
-          var asm = code.substring(startAsm, endAsm);
-          do
-          {
-          var moar = false; // we need to re-do, as x(x( will not be fixed
-          asm = asm.replace(new RegExp('[^a-zA-Z0-9\\$\\_]' + minified + '\\(', 'g'), function(s) { moar = true; return s[0] + '(' });
-          
-          } while (moar);
-          code = code.substring(0, startAsm) + asm + code.substring(endAsm);
-          code = code.replace("'use asm'", "'almost asm'");
-        }
-        catch(e)
-        {
-          console.log('failed to optimize out Math.fround calls ' + e)
-        }
-      }
-
-      var blob = new Blob([code], { type: 'text/javascript' });
-      codeXHR = null;
-      var src = URL.createObjectURL(blob);
-      var script = document.createElement('script');
-      script.src = URL.createObjectURL(blob);
-      script.onload = function() {
-        URL.revokeObjectURL(script.src);
-      };
-      document.body.appendChild(script);
-      };
-      codeXHR.send(null);
-    }
-	</script>
   </body>
 </html>
