@@ -4,14 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Path</title>
-    <style type="text/css">
-      html, body {margin: 0; height: 100%; overflow: hidden}
-    </style>
   </head>
   <body style="text-align: center">
     <canvas id="unity-canvas" style="background: #231F20"></canvas>
     <script>
       var unityCanvas = document.querySelector("#unity-canvas");
+      unityCanvas.requestFullscreen();
       unityCanvas.height = window.innerHeight / 1.025;
       unityCanvas.style.height = window.innerHeight / 1.025 + "px";
       unityCanvas.width = window.innerWidth / 1.025;
