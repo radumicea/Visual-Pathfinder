@@ -8,20 +8,11 @@
   <body style="text-align: center">
     <canvas id="unity-canvas" style="background: #231F20"></canvas>
     <script>
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width = device-width / 1.1, height = device-height / 1.1, initial-scale = 1.0, user-scalable = no, shrink-to-fit = yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
-      else {
-        var unityCanvas = document.querySelector("#unity-canvas");
-        unityCanvas.height = window.innerHeight / 1.1;
-        unityCanvas.style.height = window.innerHeight / 1.1 + "px";
-        unityCanvas.width = window.innerWidth / 1.1;
-        unityCanvas.style.width = window.innerWidth / 1.1 + "px";
-      }
+      var unityCanvas = document.querySelector("#unity-canvas");
+      unityCanvas.height = window.innerHeight / 1.1;
+      unityCanvas.style.height = window.innerHeight / 1.1 + "px";
+      unityCanvas.width = window.innerWidth / 1.1;
+      unityCanvas.style.width = window.innerWidth / 1.1 + "px";
     </script>
     <script src="Build/Builds.loader.js"></script>
     <script>
@@ -32,7 +23,7 @@
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Radu",
         productName: "Path",
-        productVersion: "1.6",
+        productVersion: "1.4",
       });
     </script>
   </body>
