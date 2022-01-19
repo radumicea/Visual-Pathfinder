@@ -1,6 +1,5 @@
 // TODO:
 // more algs
-// tutorial with explanations
 
 using System.Collections.Generic;
 
