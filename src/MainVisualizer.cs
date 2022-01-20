@@ -1,6 +1,3 @@
-// TODO:
-// more algs
-
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -44,7 +41,7 @@ public class MainVisualizer : MonoBehaviour
         vertical = (int)fVertical;
         horizontal = (int)(fVertical * Camera.main.aspect);
         var dv = (vertical <= horizontal) ? -vertical / 6F / resizeFactor : vertical / 10.25F / resizeFactor;
-        var verticalOffset = (vertical > horizontal) ? 0 : 0.5F;
+        var verticalOffset = (vertical > horizontal) ? -1.5F : 0.5F;
         vertical -= (int)Mathf.Abs(dv);
 
         VisualGrid.Vertical = vertical;
