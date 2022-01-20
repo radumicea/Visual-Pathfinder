@@ -95,7 +95,7 @@ namespace VisualGridNamespace
             var dx = Mathf.Abs(current.Coordinates.x - end.Coordinates.x);
             var dy = Mathf.Abs(current.Coordinates.y - end.Coordinates.y);
 
-            return Mathf.Min(dx, dy) * SQRT_2 + Math.Abs(dx - dy);
+            return (Mathf.Min(dx, dy) * SQRT_2 + Math.Abs(dx - dy));
         }
     }
 }
