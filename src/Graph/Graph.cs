@@ -13,7 +13,7 @@ namespace GraphNamespace
 
         public bool Contains(N node)
         {
-            return adjacencyList.ContainsKey(node) && node.IsAvailable;
+            return (adjacencyList.ContainsKey(node) && node.IsAvailable);
         }
 
         public bool AreAdjacent(N x, N y)
