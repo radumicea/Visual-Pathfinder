@@ -20,5 +20,5 @@ Because _A* can be seen as an extension of Dijkstra's algorithm_, I have chosen 
 The nice thing about my implementation is that __any__ class that extends the Graph class (which in turn is generic and can have as nodes any class that implements the INodeInterface) is suitable to be searched on. However, for the sake of simplicity and visual representation, for this project I have opted to showcase the algorithms on a graph that takes the form of a 2D grid map.
 ### Use of multiple destination (interest) points
 The two algorithms __guarantee__ the shortest path between the start node and the closest (as long as there are no obstacles) interest point. By marking a reached interest point as start and then starting the search again from said node, it can find the shortest path between any two nodes marked on the grid map. It does _not_ however guarantee the shortest path through all the interest points.
-### Obstacles (destroyed tiles) and A*
-Because the heuristic function can not account for the destroyed tiles and the distance associated with going around them, A* will often pass right by closer points, in its search for the point it believes is closest.
+### Obstacles and A*
+Because the heuristic function can not account for the obstacles and the distance associated with going around them, A* will often pass right by closer points, in its search for the point it believes is closest.
