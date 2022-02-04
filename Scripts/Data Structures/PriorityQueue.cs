@@ -1,48 +1,129 @@
+using System;
 using System.Collections.Generic;
 
 namespace DataStructures
 {
     public class PriorityQueue<N>
     {
-        private readonly List<N> nodes;
+        private const int DefaultCapacity = 16;
+        private N[] heap;
         private int count;
         private readonly IComparer<N> cmp;
 
         public int Count { get { return count; } }
+        public N First
+        {
+            get
+            {
+                if (count == 0)
+                {
+                    throw new InvalidOperationException("The priorityQueue is empty!");
+                }
+
+                return heap[0];
+            }
+        }
+
+        public PriorityQueue() : this(Comparer<N>.Default) { }
 
         public PriorityQueue(IComparer<N> comparer)
         {
-            nodes = new List<N>();
-            count = 0;
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            heap = new N[DefaultCapacity];
             cmp = comparer;
         }
 
-        public PriorityQueue(int count, IComparer<N> comparer)
+        public PriorityQueue(int capacity) : this(capacity, Comparer<N>.Default) { }
+
+        public PriorityQueue(int capacity, IComparer<N> comparer)
         {
-            nodes = new List<N>(count);
-            this.count = 0;
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            heap = new N[GetCapacity(capacity)];
             cmp = comparer;
         }
 
-        public PriorityQueue(List<N> elements, IComparer<N> comparer)
+        public PriorityQueue(ICollection<N> collection) : this(collection, Comparer<N>.Default) { }
+
+        public PriorityQueue(ICollection<N> collection, IComparer<N> comparer)
         {
-            nodes = elements;
-            count = nodes.Count;
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(nameof(comparer));
+            }
+
+            heap = new N[GetCapacity(collection.Count)];
+            collection.CopyTo(heap, 0);
+            count = collection.Count;
             cmp = comparer;
             Heapify();
         }
 
+        private PriorityQueue(N[] heap, int count, IComparer<N> cmp)
+        {
+            this.heap = heap;
+            this.count = count;
+            this.cmp = cmp;
+        }
+
+        private static int GetCapacity(int capacity)
+        {
+            int n = DefaultCapacity;
+
+            if (capacity >= n)
+            {
+                n = GetNextPow2(capacity);
+
+                if (n < DefaultCapacity)
+                {
+                    n = DefaultCapacity;
+                }
+            }
+
+            return n;
+        }
+
+        private static int GetNextPow2(int n)
+        {
+            n |= (n >> 1);
+            n |= (n >> 2);
+            n |= (n >> 4);
+            n |= (n >> 8);
+            n |= (n >> 16);
+
+            return n + 1;
+        }
+
         public PriorityQueue<N> Merge(PriorityQueue<N> priorityQueue)
         {
-            var nodes = new List<N>(this.nodes);
-            nodes.AddRange(priorityQueue.nodes);
+            if (priorityQueue == null)
+            {
+                throw new ArgumentNullException(nameof(priorityQueue));
+            }
 
-            return new PriorityQueue<N>(nodes, cmp);
+            var heap = new N[GetNextPow2(this.count + priorityQueue.count)];
+            Array.Copy(this.heap, heap, this.count);
+            Array.Copy(priorityQueue.heap, 0, heap, this.count, priorityQueue.count);
+            var pq = new PriorityQueue<N>(heap, this.count + priorityQueue.count, this.cmp);
+            pq.Heapify();
+
+            return pq;
         }
 
         private void Heapify()
         {
-            for (var parent = count / 2 - 1; parent >= 0; parent--)
+            for (int parent = count / 2 - 1; parent >= 0; parent--)
             {
                 SiftDown(parent);
             }
@@ -52,34 +133,34 @@ namespace DataStructures
         {
             if (count == 0)
             {
-                throw new System.IndexOutOfRangeException("The priorityQueue is empty!");
+                throw new InvalidOperationException("Priority Queue is empty!");
             }
 
-            N retNode = nodes[0];
+            N item = heap[0];
 
             Remove(0);
 
-            return retNode;
+            return item;
         }
 
         private void Remove(int index)
         {
             if (count == 0)
             {
-                throw new System.IndexOutOfRangeException("The priorityQueue is empty!");
+                throw new InvalidOperationException("Priority Queue is empty!");
             }
 
             if (index < 0)
             {
-                throw new System.IndexOutOfRangeException("index" + index + " < 0");
+                throw new IndexOutOfRangeException("index" + index + " < 0");
             }
 
             if (index >= count)
             {
-                throw new System.IndexOutOfRangeException("Index: " + index + ", Size: " + count);
+                throw new IndexOutOfRangeException("Index: " + index + ", Size: " + count);
             }
 
-            nodes[index] = nodes[count - 1];
+            heap[index] = heap[count - 1];
             count--;
             SiftDown(index);
         }
@@ -88,10 +169,10 @@ namespace DataStructures
         {
             if (count == 0)
             {
-                throw new System.IndexOutOfRangeException("The priorityQueue is empty!");
+                throw new InvalidOperationException("The priorityQueue is empty!");
             }
 
-            nodes[0] = node;
+            heap[0] = node;
             SiftDown(0);
         }
 
@@ -99,12 +180,12 @@ namespace DataStructures
         {
             if (parent < 0)
             {
-                throw new System.IndexOutOfRangeException("index: " + parent + " < 0");
+                throw new IndexOutOfRangeException("index: " + parent + " < 0");
             }
 
             if (parent > count)
             {
-                throw new System.IndexOutOfRangeException("Index: " + parent + ", Size: " + count);
+                throw new IndexOutOfRangeException("Index: " + parent + ", Size: " + count);
             }
 
             var l = parent * 2 + 1;
@@ -114,12 +195,12 @@ namespace DataStructures
             {
                 var swapAt = parent;
 
-                if (cmp.Compare(nodes[swapAt], nodes[l]) > 0)
+                if (cmp.Compare(heap[swapAt], heap[l]) > 0)
                 {
                     swapAt = l;
                 }
 
-                if (r < count && cmp.Compare(nodes[swapAt], nodes[r]) > 0)
+                if (r < count && cmp.Compare(heap[swapAt], heap[r]) > 0)
                 {
                     swapAt = r;
                 }
@@ -129,7 +210,7 @@ namespace DataStructures
                     return;
                 }
 
-                (nodes[swapAt], nodes[parent]) = (nodes[parent], nodes[swapAt]);
+                (heap[swapAt], heap[parent]) = (heap[parent], heap[swapAt]);
 
                 parent = swapAt;
                 l = parent * 2 + 1;
@@ -137,27 +218,14 @@ namespace DataStructures
             }
         }
 
-        public N Peek()
+        public void Offer(N item)
         {
-            if (count == 0)
+            if (count == heap.Length)
             {
-                throw new System.IndexOutOfRangeException("The priorityQueue is empty!");
+                Array.Resize(ref heap, count << 1);
             }
 
-            return nodes[0];
-        }
-
-        public void Offer(N element)
-        {
-            if (count == nodes.Count)
-            {
-                nodes.Add(element);
-            }
-
-            else
-            {
-                nodes[count] = element;
-            }
+            heap[count] = item;
 
             SiftUp(count);
             count++;
@@ -165,25 +233,30 @@ namespace DataStructures
 
         private void SiftUp(int child)
         {
-            if (child < 0 || child > count)
+            if (child < 0)
             {
-                throw new System.IndexOutOfRangeException();
+                throw new IndexOutOfRangeException("index: " + child + " < 0");
+            }
+
+            if (child > count)
+            {
+                throw new IndexOutOfRangeException("Index: " + child + ", Size: " + count);
             }
 
             var parent = (child + 1) / 2 - 1;
 
-            while (child != 0 && (cmp.Compare(nodes[child], nodes[parent]) < 0))
+            while (child != 0 && (cmp.Compare(heap[child], heap[parent]) < 0))
             {
-                (nodes[child], nodes[parent]) = (nodes[parent], nodes[child]);
+                (heap[child], heap[parent]) = (heap[parent], heap[child]);
 
                 child = parent;
                 parent = (child + 1) / 2 - 1;
             }
         }
 
-        public bool Contains(N element)
+        public bool Contains(N item)
         {
-            return nodes.Contains(element);
+            return (Array.IndexOf(heap, item) != -1);
         }
     }
 }
