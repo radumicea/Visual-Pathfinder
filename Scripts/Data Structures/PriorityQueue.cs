@@ -112,7 +112,7 @@ namespace DataStructures
                 throw new ArgumentNullException(nameof(priorityQueue));
             }
 
-            var heap = new N[GetNextPow2(this.count + priorityQueue.count)];
+            var heap = new N[GetCapacity(this.count + priorityQueue.count)];
             Array.Copy(this.heap, heap, this.count);
             Array.Copy(priorityQueue.heap, 0, heap, this.count, priorityQueue.count);
             var pq = new PriorityQueue<N>(heap, this.count + priorityQueue.count, this.cmp);
@@ -138,12 +138,12 @@ namespace DataStructures
 
             N item = heap[0];
 
-            Remove(0);
+            RemoveAt(0);
 
             return item;
         }
 
-        private void Remove(int index)
+        private void RemoveAt(int index)
         {
             if (count == 0)
             {
@@ -231,6 +231,24 @@ namespace DataStructures
             count++;
         }
 
+        public void Offer(ICollection<N> collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection));
+            }
+
+            int newCapacity = GetCapacity(count + collection.Count);
+            if (newCapacity > heap.Length)
+            {
+                Array.Resize(ref heap, newCapacity);
+            }
+
+            collection.CopyTo(heap, count);
+            count += collection.Count;
+            Heapify();
+        }
+
         private void SiftUp(int child)
         {
             if (child < 0)
@@ -256,7 +274,41 @@ namespace DataStructures
 
         public bool Contains(N item)
         {
-            return (Array.IndexOf(heap, item) != -1);
+            return (Array.IndexOf(heap, item, 0, count) != -1);
+        }
+
+        public void Clear()
+        {
+            count = 0;
+        }
+
+        public override string ToString()
+        {
+            var sb = new System.Text.StringBuilder();
+
+            for (int i = 1; i <= count; i++)
+            {
+                sb.Append(heap[i - 1]).Append(' ');
+
+                if (IsPow2(i + 1) && i != count)
+                {
+                    sb.Append('\n');
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private static bool IsPow2(int n)
+        {
+            if (n == 0)
+            {
+                return false;
+            }
+
+            var log2 = Math.Log(n) / Math.Log(2);
+
+            return (int)Math.Ceiling(log2) == (int)log2;
         }
     }
 }
